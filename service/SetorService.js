@@ -22,7 +22,7 @@ class SetorService {
 
   static async  buscarPeloId(id){
     try {
-        const setorBusca = await database.setor.findByPk(id);
+        const setorBusca = await database.Setor.findByPk(id);
         return setorBusca
     } catch (error) {
         
@@ -49,12 +49,13 @@ class SetorService {
             }
         })
 
-        if(deletado > 0){
-            
-        }
+        if(!deletado > 0) {
+        throw new Error(`Erro ao deletar Setor: ${error.message}`);
+        } 
     } catch (error) {
-        
+        throw new Error(`Erro ao conectar ao banco: ${error.message}`);
     }
+    return true;
   }
 
 

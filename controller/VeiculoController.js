@@ -1,0 +1,1 @@
+const veiculoService = require('../service/VeiculoService.js');

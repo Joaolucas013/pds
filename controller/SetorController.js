@@ -66,6 +66,25 @@ class SetorController {
     }
   }
 
+   static async deletarSetor(req, res){
+    try {
+        const { id } = req.params;
+
+            const deletado = await SetorService.deletarSetor(id);
+
+            if(!deletado){
+                    return res.status(404).json({
+                        message: 'erro ao deletar setor'
+                    })
+            }
+            
+    } catch (error) {
+        return res.status(500).json({
+            message: 'erro ao conectar ao servidor'
+        })
+    }
+   }
+
 }
 
 module.exports = SetorController;

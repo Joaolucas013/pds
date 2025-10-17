@@ -49,7 +49,7 @@ try {
         return false
       }
 } catch (error) {
-    throw error;
+     throw new Error(`Erro ao deletar material: ${error.message}`);
 }
 }
 

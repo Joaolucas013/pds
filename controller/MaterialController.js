@@ -55,7 +55,9 @@ static async listarMaterial(req, res){  // r
     })
 
     } catch (error) {
-    throw error;
+    return res.status(404).json({
+        
+    })
     }
     }
 
@@ -71,7 +73,9 @@ static async listarMaterial(req, res){  // r
             })
         }
     } catch (error) {
-        throw error;
+          return res.status(404).json({
+                message: 'material não encontrado ou nenhum dado alterado.'
+            });
     }
   }
 
