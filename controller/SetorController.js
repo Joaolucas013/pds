@@ -62,7 +62,9 @@ class SetorController {
 }
      
     } catch (error) {
-        
+         res.status(400).json({
+            message: 'registro ao conectar ao banco'
+          })
     }
   }
 

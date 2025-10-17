@@ -4,6 +4,7 @@ const SetorController = require('../controller/SetorController.js');
 const MaterialController = require('../controller/MaterialController.js');
 const MotoristaController = require('../controller/MotoristaController.js')
 const VeiculoController = require('../controller/VeiculoController.js')
+const FuncionarioController = require('../controller/FuncionarioController.js')
 
 
 const rotas = Router();
@@ -36,6 +37,8 @@ rotas.get("/veiculo/buscar", (req, res) => VeiculoController.buscarVeiculo(req, 
 rotas.delete("/veiculo/:id", (req, res) => VeiculoController.deletar(req, res));
 
 
+// funcionario
+rotas.post("/funcionario/post", (req, res) => FuncionarioController.cadastrar(req, res));
 
 module.exports = rotas;
 
