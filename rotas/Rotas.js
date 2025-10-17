@@ -3,6 +3,7 @@ const {Router} = require('express');
 const SetorController = require('../controller/SetorController.js');
 const MaterialController = require('../controller/MaterialController.js');
 const MotoristaController = require('../controller/MotoristaController.js')
+const VeiculoController = require('../controller/VeiculoController.js')
 
 
 const rotas = Router();
@@ -23,11 +24,16 @@ rotas.delete("/material/:id", (req, res) =>  MaterialController.deletarMaterial(
 
 
 // rotas de motorista
-rotas.post("/motorista/create", (req, res) => MotoristaController.salvar(req, res));
+rotas.post("/motorista/create", (req, res) => MotoristaController.salvarMotorista(req, res));
 rotas.put("/motorista/:id", (req, res) => MotoristaController.atualizarMotorista(req, res));
 rotas.get("/motorista/:id", (req, res) => MotoristaController.pesquisarMotorista(req, res));
 rotas.delete("/motorista/:id", (req, res) => MotoristaController.deletarMotorista(req, res));
 
+// veiculos
+rotas.post("/veiculo", (req, res) => VeiculoController.salvar(req, res));
+rotas.put("/veiculo/atualizar", (req, res) => VeiculoController.atualizaVeiculo(req, res));
+rotas.get("/veiculo/buscar", (req, res) => VeiculoController.buscarVeiculo(req, res));
+rotas.delete("/veiculo/:id", (req, res) => VeiculoController.deletar(req, res));
 
 
 

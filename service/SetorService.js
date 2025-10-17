@@ -16,30 +16,38 @@ class SetorService {
       const setores = await database.Setor.findAll({});
       return setores;
     } catch (error) {
-      throw new Error('Erro: ' + error.message);
+      throw new Error(`Erro ao acessar o banco: ${error.message}`);
     }
   }
 
   static async  buscarPeloId(id){
     try {
+
         const setorBusca = await database.Setor.findByPk(id);
-        return setorBusca
+        return setorBusca;
+
     } catch (error) {
-        
+          throw new Error(`Erro ao acessar o banco: ${error.message}`);
     }
   }
 
   static async atualiza(id, dados){
     try {
-        
-    } catch (error) {
         const dadosAtualizados = await database.Setor.update(dados,  {
             where: {
                 id: id
             }
         } )
+        
+        if(!dadosAtualizados > 0){
+                return false;
+        }
+    } catch (error) {
+          throw new Error(`Erro ao acessar o banco: ${error.message}`);
     }
+    return true;
   }
+  
 
   static async deletarSetor(id){
     try {

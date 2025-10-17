@@ -51,12 +51,12 @@ static async listarMaterial(req, res){  // r
     }
 
     return res.status(200).json({
-        message: `id ${id} atualizado com sucesso!!`
+        message: `id ${id} atualizado com sucesso!`
     })
 
     } catch (error) {
     return res.status(404).json({
-        
+        message: 'Material nao encontrado!'
     })
     }
     }
@@ -99,16 +99,7 @@ static async buscarMaterial(req, res) {
 }
 
 
-
-  
-
-
 }
-
-
-
-
-
 
 
 module.exports = MaterialController;

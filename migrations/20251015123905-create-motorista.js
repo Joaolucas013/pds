@@ -10,22 +10,25 @@ module.exports = {
         type: Sequelize.INTEGER
       },
       cpf: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false,
+        unique: true
       },
       cnh: {
-        type: Sequelize.STRING
+        type: Sequelize.STRING,
+        allowNull: false
       },
       nome: {
         type: Sequelize.STRING
       },
       data_admissao: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       situacao: {
         type: Sequelize.BOOLEAN
       },
       data_demissao: {
-        type: Sequelize.DATE
+        type: Sequelize.DATEONLY
       },
       createdAt: {
         allowNull: false,
