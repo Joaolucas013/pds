@@ -1,11 +1,9 @@
 const database = require('../models');
 
 
-
 class FuncionarioService {
 
-
-    static async salvar(dados){
+        static async salvar(dados){
         try {
             const func = await database.Funcionario.create(dados);
             return func;

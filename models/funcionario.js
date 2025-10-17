@@ -9,11 +9,16 @@ module.exports = (sequelize, DataTypes) => {
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
-    static associate(models) {
-     Funcionario.belongsTo(models.Setor, {
-      foreignKey: 'setor_id'
-     })
-    }
+  static associate(models) {
+  Funcionario.belongsTo(models.Setor, {
+    foreignKey: {
+      name: 'setor_id',        
+      allowNull: false        
+    },
+    onDelete: 'CASCADE'        
+  });
+}
+
   }
   Funcionario.init({
     nome: {
