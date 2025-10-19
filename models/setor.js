@@ -11,14 +11,16 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-    Setor.hasMany(models.Setor, {
+    Setor.hasMany(models.Funcionario, {
       foreignKey: 'setor_id'
     })
     }
   }
   Setor.init({
     nome: {
-      type: DataTypes.STRING
+      type: DataTypes.STRING,
+      allowNull: false,
+      unique: true
     } ,
 
     id: {
