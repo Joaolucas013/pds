@@ -10,7 +10,7 @@ class VeiculoController {
             const veiculoNovo = await veiculoService.salvar(dados);
             res.status(200).json({
                 message: 'Veiculo criado com sucesso.',
-                veiculoNovo
+                veiculo: veiculoNovo
             })
         } catch (error) {
             return res.status(500).json({

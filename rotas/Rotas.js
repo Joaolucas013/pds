@@ -33,7 +33,7 @@ rotas.get("/motorista/:id", (req, res) => MotoristaController.pesquisarMotorista
 rotas.delete("/motorista/:id", (req, res) => MotoristaController.deletarMotorista(req, res));
 
 // veiculos
-rotas.post("/veiculo", (req, res) => VeiculoController.salvar(req, res));
+rotas.post("/veiculo", (req, res) => VeiculoController.cadastrarVeiculo(req, res));
 rotas.put("/veiculo/atualizar", (req, res) => VeiculoController.atualizaVeiculo(req, res));
 rotas.get("/veiculo/buscar", (req, res) => VeiculoController.buscarVeiculo(req, res));
 rotas.delete("/veiculo/:id", (req, res) => VeiculoController.deletar(req, res));

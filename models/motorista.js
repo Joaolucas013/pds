@@ -1,7 +1,10 @@
 'use strict';
 const {
-  Model
+  Model,
+  DATEONLY,
+  DATE
 } = require('sequelize');
+const { now } = require('sequelize/lib/utils');
 module.exports = (sequelize, DataTypes) => {
   class Motorista extends Model {
     /**
@@ -44,11 +47,13 @@ allowNull: false
 
     data_admissao:{
 type: DataTypes.DATE,
-allowNull: false
+allowNull: false,
+defaultValue: DataTypes.NOW
     },
 
     situacao:  {
  type: DataTypes.BOOLEAN,
+ defaultValue: true
     }, 
     data_demissao:{ type:
        DataTypes.DATE

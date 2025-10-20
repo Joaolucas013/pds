@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { path } = require('../App');
 module.exports = (sequelize, DataTypes) => {
   class Veiculo extends Model {
 
@@ -23,7 +24,7 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: 'fk_veiculo'
       })
 
-      
+
     }
   }
   Veiculo.init({
@@ -41,22 +42,32 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     tipo: {
-      type: DataTypes.STRING,
+      type: DataTypes.ENUM('Caminhão Refrigerado', 'Sider', 'Granaleiro'), 
+      allowNull: false,
+      validate: {
+        validator: (valor) =>   valor !== "",
+        message: ({path}) => `o campo ${path} está nulo`
+      } 
     },
 
+   
     cor: {
       type: DataTypes.STRING,
     },
 
     situacao: {
       type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true
     },
 
     quilometragem: {
       type: DataTypes.DECIMAL,
+      allowNull: false
     },
     ano_fabricacao: {
-      type: DataTypes.DATEONLY
+      type: DataTypes.DATEONLY,
+      allowNull: false
     }
   }, {
     sequelize,
