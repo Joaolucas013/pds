@@ -2,46 +2,46 @@ const veiculoService = require('../service/VeiculoService.js');
 
 
 
-class VeiculoController{
+class VeiculoController {
 
-    static async cadastrarVeiculo(req, res){ 
+    static async cadastrarVeiculo(req, res) {
         try {
             const dados = req.body;
-            const veiculoNovo =  await veiculoService.salvar(dados);
+            const veiculoNovo = await veiculoService.salvar(dados);
             res.status(200).json({
                 message: 'Veiculo criado com sucesso.',
-               veiculoNovo
+                veiculoNovo
             })
         } catch (error) {
             return res.status(500).json({
                 message: 'erro ao criar veiculo',
-            error
+                error
             })
         }
     }
 
-      static async atualizaVeiculo(req, res){
+    static async atualizaVeiculo(req, res) {
         try {
-            const { id }  = req.params;
+            const { id } = req.params;
             const dados = req.body;
-                const atualizadoVeiculo = await veiculoService.atualizarVeiculo(Number(id), dados)
+            const atualizadoVeiculo = await veiculoService.atualizarVeiculo(Number(id), dados)
 
-                if(!atualizadoVeiculo){
-                    res.status(404).json({
-                        message: 'Veiculo não encontrado e nenhuma linha atualizada'
-                    })
-                }
+            if (!atualizadoVeiculo) {
+                res.status(404).json({
+                    message: 'Veiculo não encontrado e nenhuma linha atualizada'
+                })
+            }
 
         } catch (error) {
-             return res.status(500).json({
+            return res.status(500).json({
                 message: 'erro ao atualizar veiculo',
-            error
+                error
             })
         }
     }
 
-    static async buscarVeiculo(req, res){
-        const {id} = req.params;
+    static async buscarVeiculo(req, res) {
+        const { id } = req.params;
 
         try {
             const veiculo = await veiculoService.buscar(Number(id));
@@ -56,27 +56,27 @@ class VeiculoController{
         }
     }
 
-    static async deletar(req, res){
+    static async deletar(req, res) {
         try {
-            const {id} =  req.params;
+            const { id } = req.params;
             const deletado = await veiculoService.deletarVeiculo(Number(id));
 
-            if(!deletado){
-                 return res.status(404).json({
-                message: 'erro ao deletar veiculo, nenhuma linha atualizada',
-            error
-            })
+            if (!deletado) {
+                return res.status(404).json({
+                    message: 'erro ao deletar veiculo, nenhuma linha atualizada',
+                    error
+                })
             }
         } catch (error) {
-             return res.status(500).json({
+            return res.status(500).json({
                 message: 'erro ao acessar o banco',
-            error
+                error
             })
         }
     }
 
 
-  
+
 
 }
 

@@ -3,38 +3,32 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Material extends Model {
+  class Procedimento extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      Material.hasMany(models.Itens, {
-        foreignKey: 'fk_material'
+      Procedimento.belongsTo(models.Setor, {
+        foreignKey: 'setor_id',
       })
     }
   }
-  Material.init({
-    valorUnitario: {
-     type:  DataTypes.DECIMAL(6,2),
-     allowNull: false
-    },
-    quantidadeEstoque: {
-  type: DataTypes.INTEGER,
-  allowNull: false
-    },
-    
+  Procedimento.init({
     descricao: {
- type: DataTypes.STRING,
- allowNull: false
-
+      type: DataTypes.STRING,
+    }, 
+   
+   valor_unitario: {
+   type:  DataTypes.DOUBLE,
+   allowNull: false
     }
   }, {
     sequelize,
-    modelName: 'Material',
-    tableName: 'materiais', 
+    modelName: 'Procedimento',
+    tableName: 'procedimentos',
     timestamps: false
   });
-  return Material;
+  return Procedimento;
 };

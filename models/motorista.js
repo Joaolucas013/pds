@@ -10,7 +10,9 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      Motorista.hasMany(models.Veiculo_Motorista, {
+        foreignKey: 'fk_motorista'
+      })
     }
   }
   Motorista.init({
@@ -20,7 +22,7 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     }, 
       id_motorista: {
- type: DataTypes.TINYINT.UNSIGNED,
+   type: DataTypes.TINYINT.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
     },

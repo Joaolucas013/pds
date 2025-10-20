@@ -3,36 +3,47 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Veiculos extends Model {
-  
+  class Veiculo extends Model {
+
+
     static associate(models) {
-      // define association here
+      Veiculo.belongsTo(models.Modelo, {
+        foreignKey: {
+          name: 'modelo_id',
+          allowNull: false
+        },
+        onDelete: 'CASCADE',
+      });
+
+      Veiculo.hasMany(models.Veiculo_Motorista, {
+        foreignKey: 'fk_veiculo'
+      })
     }
   }
-  Veiculos.init({
+  Veiculo.init({
     placa: {
-    type:  DataTypes.STRING,
-    primaryKey: true, 
-    unique:true
-},
+      type: DataTypes.STRING,
+      primaryKey: true,
+      unique: true
+    },
 
 
     chassi: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique:true
+      unique: true
     },
 
-    tipo:{
-type: DataTypes.STRING,
+    tipo: {
+      type: DataTypes.STRING,
     },
 
     cor: {
       type: DataTypes.STRING,
     },
 
-    situacao:{
-type:  DataTypes.BOOLEAN,
+    situacao: {
+      type: DataTypes.BOOLEAN,
     },
 
     quilometragem: {
@@ -45,7 +56,7 @@ type:  DataTypes.BOOLEAN,
     sequelize,
     modelName: 'Veiculo',
     tableName: 'veiculos',
-     timestamps: false
+    timestamps: false
   });
-  return Veiculos;
+  return Veiculo;
 };

@@ -1,63 +1,62 @@
-const database = require('../models') 
+const database = require('../models')
 
 class MaterialService {
 
 
-    static async  criar(dados){
-        try {
-         const material = await database.Material.create(dados);
-         return material;
-        } catch (error) {
-            throw  error;
-        }
-    }
-
-    static async getAll(){
+  static async criar(dados) {
     try {
-        const todosMateriais = await database.Material.findAll();
-        return todosMateriais;
+      const material = await database.Material.create(dados);
+      return material;
     } catch (error) {
-        throw error(error.message)
+      throw error;
     }
-}
+  }
 
-static async atualiza(id, dadosAtualizados){
-
-const ListaMateriaisAtualizados = database.Material.update(dadosAtualizados, {
-    where: {
-        id: id
+  static async getAll() {
+    try {
+      const todosMateriais = await database.Material.findAll();
+      return todosMateriais;
+    } catch (error) {
+      throw error(error.message)
     }
-});
+  }
 
-if(!ListaMateriaisAtualizados[0] === 0){
-return false
-}
-return true;
-}
+  static async atualiza(id, dadosAtualizados) {
 
-static async deletar(id){
-try {
-    const materialDeletado = await database.Material.destroy( {
+    const ListaMateriaisAtualizados = database.Material.update(dadosAtualizados, {
+      where: {
+        id: id}
+      });
+
+    if (ListaMateriaisAtualizados === 0) {
+      return false
+    }
+    return true;
+  }
+
+  static async deletar(id) {
+    try {
+      const materialDeletado = await database.Material.destroy({
         where: {
-            id: id
+          id: id
         }
-    })
+      })
 
-    if(materialDeletado > 0){
-      return true
-      } else{
+      if (materialDeletado > 0) {
+        return true
+      } else {
         return false
       }
-} catch (error) {
-     throw new Error(`Erro ao deletar material: ${error.message}`);
-}
-}
+    } catch (error) {
+      throw new Error(`Erro ao deletar material: ${error.message}`);
+    }
+  }
 
   static async buscarPorMaterial(material) {
     try {
       const materialGet = await database.Material.findOne({
         where: {
-          descricao: material 
+          descricao: material
         }
       });
 
@@ -66,8 +65,6 @@ try {
       throw error;
     }
   }
-
-
 
 }
 

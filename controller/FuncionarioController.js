@@ -5,20 +5,80 @@ const funcionarioService = require('../service/FuncionarioService.js');
 
 class FuncionarioController {
 
-    static async cadastrar(req, res){
+    static async cadastrar(req, res) {
         try {
             const dados = req.body;
-            const novoFuncionario =  await funcionarioService.salvar(dados);
+            const novoFuncionario = await funcionarioService.salvar(dados);
             return res.status(200).json({
                 message: 'funcionario cadastrado com sucesso.',
                 novoFuncionario
             })
         } catch (error) {
-             res.status(500).json({
-            message: 'Erro no servidor'
-          })
+            res.status(500).json({
+                message: 'Erro no servidor'
+            })
         }
     }
-}
+
+    static async atualizar(req, res) {
+        try {
+            const dados = req.body;
+            const updateFunc = await funcionarioService.update(dados);
+
+            if (updateFunc) {
+                res.status(200).json({
+                    message: 'funcionario atualizado com sucesso.'
+                })
+            } else {
+                res.status(404).json({
+                    message: 'funcionario nao encontrado.'
+                })
+            }
+        } catch (error) {
+            console.error('Erro no controller de atualização:', error);
+
+        }
+    }
+
+       static async listar(req, res) {
+        try {
+         
+            const funcGetAll = await funcionarioService.listar()
+            if(funcGetAll!==null){
+                   res.status(200).json({
+                   funcionarios: funcGetAll
+                })
+            }
+
+           } catch(error){
+                res.status(404).json({
+                  message: 'Não há funcionarios'
+                })
+           }
+        } 
+
+        static async deletar(req, res){
+            const{id} = req.params
+            try {
+                const deletado = await funcionarioService.deletar(Number(id))
+
+                if(deletado){
+                    res.status(200).json({
+                        message: `funcionario ${id} deletado com sucesso`
+                    })
+                } else{
+                    res.status(404).json({
+                        message: `funcionario não encontrado`
+                    })
+                }
+            } catch (error) {
+                res.status(500).json({
+                        message: `erro do servidor`
+                    })
+            }
+        }
+
+    }
+
 
 module.exports = FuncionarioController;

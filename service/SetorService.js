@@ -20,48 +20,48 @@ class SetorService {
     }
   }
 
-  static async  buscarPeloId(id){
+  static async buscarPeloId(id) {
     try {
 
-        const setorBusca = await database.Setor.findByPk(id);
-        return setorBusca;
+      const setorBusca = await database.Setor.findByPk(id);
+      return setorBusca;
 
     } catch (error) {
-          throw new Error(`Erro ao acessar o banco: ${error.message}`);
+      throw new Error(`Erro ao acessar o banco: ${error.message}`);
     }
   }
 
-  static async atualiza(id, dados){
+  static async atualiza(id, dados) {
     try {
-        const dadosAtualizados = await database.Setor.update(dados,  {
-            where: {
-                id: id
-            }
-        } )
-        
-        if(!dadosAtualizados > 0){
-                return false;
+      const dadosAtualizados = await database.Setor.update(dados, {
+        where: {
+          id: id
         }
+      })
+
+      if (!dadosAtualizados > 0) {
+        return false;
+      }
     } catch (error) {
-          throw new Error(`Erro ao acessar o banco: ${error.message}`);
+      throw new Error(`Erro ao acessar o banco: ${error.message}`);
     }
     return true;
   }
-  
 
-  static async deletarSetor(id){
+
+  static async deletarSetor(id) {
     try {
-        const deletado = await database.Setor.destroy({
-            where: {
-                id: id
-            }
-        })
+      const deletado = await database.Setor.destroy({
+        where: {
+          id: id
+        }
+      })
 
-        if(!deletado > 0) {
+      if (!deletado > 0) {
         throw new Error(`Erro ao deletar Setor: ${error.message}`);
-        } 
+      }
     } catch (error) {
-        throw new Error(`Erro ao conectar ao banco: ${error.message}`);
+      throw new Error(`Erro ao conectar ao banco: ${error.message}`);
     }
     return true;
   }

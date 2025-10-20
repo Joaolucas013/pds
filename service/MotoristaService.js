@@ -5,27 +5,27 @@ const database = require("../models");
 class MotoristaService {
 
 
-    static async criar(req){
+    static async criar(req) {
         try {
             const motoristaCreate = await database.Motorista.create(req);
             return motoristaCreate;
         } catch (error) {
-             throw new Error(`Erro ao criar motorista: ${error.message}`);
+            throw new Error(`Erro ao criar motorista: ${error.message}`);
         }
     }
 
 
-    static async pesquisarMotorista(id){
+    static async pesquisarMotorista(id) {
         try {
             const motorista = await database.Motorista.findByPk(id);
             return motorista;
         } catch (error) {
-             throw new Error(`Erro ao pesquisar motorista: ${error.message}`);
+            throw new Error(`Erro ao pesquisar motorista: ${error.message}`);
         }
     }
 
 
-    static async atualizar(id, dados){
+    static async atualizar(id, dados) {
         try {
             const motoristaUp = await database.Motorista.update(dados, {
                 where: {
@@ -33,9 +33,9 @@ class MotoristaService {
                 }
             })
 
-            if(motoristaUp > 0){
+            if (motoristaUp > 0) {
                 return true;
-            } else{
+            } else {
                 return false;
             }
         } catch (error) {
@@ -44,17 +44,17 @@ class MotoristaService {
     }
 
 
-    static async deleta(id){
+    static async deleta(id) {
         try {
-            const motoristaDelete =  await database.Motorista.destroy(
+            const motoristaDelete = await database.Motorista.destroy(
                 {
-                  where: {
-                      id: id
-                }
+                    where: {
+                        id: id
+                    }
                 }
             )
         } catch (error) {
-           throw new Error(`Erro ao deletar motorista: ${error.message}`);
+            throw new Error(`Erro ao deletar motorista: ${error.message}`);
         }
 
         return true;

@@ -10,10 +10,11 @@ const FuncionarioController = require('../controller/FuncionarioController.js')
 const rotas = Router();
 
 // setor
-rotas.post("/salvar", (req, res) => SetorController.salvar(req, res));
-rotas.put("/listar", (req, res) =>  SetorController.atualizarSetor(req, res));
-rotas.get("/listar/:id", (req, res) =>  SetorController.buscarIdSetor(req, res));
-rotas.delete("/listar/:id", (req, res) =>  SetorController.deletarSetor(req, res));
+rotas.post("/setor/salvar", (req, res) => SetorController.salvar(req, res));
+rotas.put("/setor/update", (req, res) =>  SetorController.atualizarSetor(req, res));
+rotas.get("/setor/listar/:id", (req, res) =>  SetorController.buscarIdSetor(req, res));
+rotas.get("/setor/listar", (req, res) =>  SetorController.listar(req, res));
+rotas.delete("/setor/deletar/:id", (req, res) =>  SetorController.deletarSetor(req, res));
 
 // rotas de materiais
 rotas.post("/material/create", (req, res) =>  MaterialController.cadastraMaterial(req, res));
@@ -39,6 +40,9 @@ rotas.delete("/veiculo/:id", (req, res) => VeiculoController.deletar(req, res));
 
 // funcionario
 rotas.post("/funcionario/post", (req, res) => FuncionarioController.cadastrar(req, res));
+rotas.put("/funcionario/update", (req, res) => FuncionarioController.atualizar(req, res));
+rotas.get("/funcionario/listar", (req, res) => FuncionarioController.listar(req, res));
+rotas.delete("/funcionario/deletar/:id", (req, res) => FuncionarioController.deletar(req, res));
 
 module.exports = rotas;
 
