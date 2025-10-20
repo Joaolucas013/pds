@@ -26,7 +26,7 @@ async function iniciarApp() {
 
 
 async  function criaTabelas(){
- await database.sequelize.sync(); 
+ await database.sequelize.sync();
 }
 
 iniciarApp();

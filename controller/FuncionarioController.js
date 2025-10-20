@@ -3,11 +3,13 @@
 const funcionarioService = require('../service/FuncionarioService.js');
 
 
+
 class FuncionarioController {
 
     static async cadastrar(req, res) {
         try {
-            const dados = req.body;
+        const dados = req.body
+          
             const novoFuncionario = await funcionarioService.salvar(dados);
             return res.status(200).json({
                 message: 'funcionario cadastrado com sucesso.',

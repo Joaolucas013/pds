@@ -15,6 +15,7 @@ rotas.put("/setor/update", (req, res) =>  SetorController.atualizarSetor(req, re
 rotas.get("/setor/listar/:id", (req, res) =>  SetorController.buscarIdSetor(req, res));
 rotas.get("/setor/listar", (req, res) =>  SetorController.listar(req, res));
 rotas.delete("/setor/deletar/:id", (req, res) =>  SetorController.deletarSetor(req, res));
+rotas.get("/setor/busca/:nomeSetor", (req, res) =>  SetorController.buscarSetorPorNome(req, res));
 
 // rotas de materiais
 rotas.post("/material/create", (req, res) =>  MaterialController.cadastraMaterial(req, res));

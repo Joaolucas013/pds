@@ -49,6 +49,19 @@ class SetorService {
   }
 
 
+  static async buscarNomeSetor(nomeSetor){
+  
+    const setor = await database.Setor.findOne({
+      where: {
+        nome: nomeSetor
+
+      }
+    })
+
+    return setor;
+  }
+
+
   static async deletarSetor(id) {
     try {
       const deletado = await database.Setor.destroy({

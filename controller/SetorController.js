@@ -1,12 +1,13 @@
 
 
-const SetorService = require('../service/SetorService');
+const setor = require('../models/setor');
+const setorService = require('../service/SetorService');
 
 class SetorController {
 
   static async salvar(req, res) {
     try {
-      const novoSetor = await SetorService.salvarSetor(req.body);
+      const novoSetor = await setorService.salvarSetor(req.body);
       return res.status(201).json({
         message: 'Setor criado com sucesso',
         setor: novoSetor
@@ -16,10 +17,26 @@ class SetorController {
     }
   }
 
+  
+  static async buscarSetorPorNome(req, res) {
+    try {
+        const { nomeSetor } = req.params; 
+        const setor = await setorService.buscarNomeSetor(nomeSetor);
+
+        if (!setor) {
+            return res.status(404).json({ message: 'Setor não encontrado' });
+        }
+
+        return res.status(200).json(setor);
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({ message: 'Erro no servidor' });
+    }
+}
 
   static async listar(req, res) {
     try {
-      const listados = await SetorService.listar();
+      const listados = await setorService.listar();
       return res.status(200).json({
         message: 'Dados dos setores',
         setores: listados
@@ -33,7 +50,7 @@ class SetorController {
   static async buscarIdSetor(req, res) {
     try {
       const { id } = req.params
-      const set = await SetorService.buscarPeloId(Number(id));
+      const set = await setorService.buscarPeloId(Number(id));
 
       return res.status(200).json({
         message: 'setor encontrado:', set
@@ -49,7 +66,7 @@ class SetorController {
     try {
       const { id } = req.params;
       const dadosAtualizados = req.body;
-      const atualiza = await SetorService.atualiza(Number(id), dadosAtualizados);
+      const atualiza = await setorService.atualiza(Number(id), dadosAtualizados);
 
       if (!atualiza) {
         res.status(400).json({
@@ -72,7 +89,7 @@ class SetorController {
     try {
       const { id } = req.params;
 
-      const deletado = await SetorService.deletarSetor(id);
+      const deletado = await setorService.deletarSetor(id);
 
       if (!deletado) {
         return res.status(404).json({

@@ -7,34 +7,33 @@ class FuncionarioService {
     static async salvar(dados) {
 
         try {
-            const { setor_id } = dados
+           
+             const { setor_id } = dados;
 
             const setorId = await setor.buscarPeloId(setor_id)
-            console.log('dados do setor:', setorId.toJSON());
-
 
             if (setorId === null) {
-                throw new Error('setor informado nao existe');
+                  throw error;
             }
 
-            const func = await database.Funcionario.create(dados);
+             const func = await database.Funcionario.create(dados);
             return func;
         } catch (error) {
-            throw new Error(`Erro ao acessar o banco: ${error.message}`);
+             throw error;
         }
 
     }
 
     static async listar() {
         const funcionarios = await database.Funcionario.findAll();
-        
+
 
 
         if (funcionarios !== null) {
             return funcionarios;
         } else {
             return null;
-         }
+        }
     }
 
 
@@ -70,19 +69,19 @@ class FuncionarioService {
     static async deletar(id) {
 
         const funcionarioExists = await database.Funcionario.findByPk(id);
-     
 
-        if(funcionarioExists !==null){
 
-             const funcionarioDeletado = await database.Funcionario.destroy({
-            where: { id: id }
-        });
+        if (funcionarioExists !== null) {
 
-        return funcionarioDeletado > 0;
-        } else{
+            const funcionarioDeletado = await database.Funcionario.destroy({
+                where: { id: id }
+            });
+
+            return funcionarioDeletado > 0;
+        } else {
             return null;
         }
-       
+
 
     }
 }

@@ -7,7 +7,9 @@ module.exports = (sequelize, DataTypes) => {
    
     static associate(models) {
       Trabalha.belongsTo(models.Funcionario, {
-        foreignKey: 'funcionario_id'
+          foreignKey: 'funcionario_id',
+        onDelete: 'CASCADE',
+        onUpdate: 'CASCADE'
       });
 
       Trabalha.belongsTo(models.Procedimento, {
@@ -19,7 +21,7 @@ module.exports = (sequelize, DataTypes) => {
       })
     }
   }
-  Trabalha.init({
+  Trabalha.init({ 
     valor_unitario: {
       type: DataTypes.DECIMAL,
       allowNull: false

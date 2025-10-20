@@ -19,7 +19,9 @@ module.exports = (sequelize, DataTypes) => {
   });
 
   Funcionario.hasMany(models.Trabalha, {
-    foreignKey: 'funcionario_id'
+    foreignKey: 'funcionario_id',
+     onDelete: 'CASCADE',
+  onUpdate: 'CASCADE' 
   })
 }
 
