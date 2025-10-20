@@ -8,7 +8,11 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       Itens.belongsTo(models.Material, {
         foreignKey: 'fk_material'
-      })
+      });
+
+    Itens.belongsTo(models.Ordem_Servico, {
+      foreignKey: 'ordem_servico_id'
+    })  
     }
   }
   Itens.init({

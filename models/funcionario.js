@@ -17,6 +17,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     onDelete: 'CASCADE'        
   });
+
+  Funcionario.hasMany(models.Trabalha, {
+    foreignKey: 'funcionario_id'
+  })
 }
 
   }

@@ -18,6 +18,12 @@ module.exports = (sequelize, DataTypes) => {
       Veiculo.hasMany(models.Veiculo_Motorista, {
         foreignKey: 'fk_veiculo'
       })
+
+      Veiculo.hasMany(models.Manutencao, {
+        foreignKey: 'fk_veiculo'
+      })
+
+      
     }
   }
   Veiculo.init({
