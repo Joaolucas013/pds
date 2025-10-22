@@ -8,18 +8,23 @@ class FuncionarioService {
 
         try {
            
-             const { setor_id } = dados;
+             const { setor_id, cpf } = dados;
+            const  validaCpf = await validacao(cpf);
+
+            if(!validaCpf){
+                return null;
+            }
 
             const setorId = await setor.buscarPeloId(setor_id)
 
             if (setorId === null) {
-                  throw error;
+                 return null
             }
 
              const func = await database.Funcionario.create(dados);
             return func;
         } catch (error) {
-             throw error;
+             throw new Error('Erro do servidor')
         }
 
     }
@@ -36,9 +41,7 @@ class FuncionarioService {
     static async listar() {
         const funcionarios = await database.Funcionario.findAll();
 
-
-
-        if (funcionarios !== null) {
+      if (funcionarios !== null) {
             return funcionarios;
         } else {
             return null;
@@ -93,7 +96,22 @@ class FuncionarioService {
 
 
     }
+
+    static async #validacao(cpf){
+
+       const  funcionarioExists = await this.buscar(cpf);
+
+       if(funcionarioExists !==null){
+        return false;
+       }
+
+       return true;
+
+    }
+
 }
+
+    
 
 
 

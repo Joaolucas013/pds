@@ -1,18 +1,18 @@
 
 const manutencaoService = require('../service/ManutencaoService');
 
-class ManutencaoController{
+class ManutencaoController {
 
 
 
-    static async cadastrar(req, res){
+    static async cadastrar(req, res) {
         try {
             const dados = req.body;
-            const novaManutencao =  await manutencaoService.create(dados);
-           
-            if(novaManutencao !== null){
+            const novaManutencao = await manutencaoService.create(dados);
+
+            if (novaManutencao !== null) {
                 res.status(200).json({
-                    message: 'Manutencão cadastrada com sucesso.', 
+                    message: 'Manutencão cadastrada com sucesso.',
                     manutencao: novaManutencao
                 })
             }
@@ -23,11 +23,12 @@ class ManutencaoController{
             })
         }
     }
-    static async listar(req, res){
+
+    static async listar(req, res) {
         try {
 
             const manutencoes = await manutencaoService.listar();
-            res.status(200).json({ 
+            res.status(200).json({
                 message: 'Lista de manutenções',
                 manutencoes: manutencoes
             })
@@ -37,34 +38,34 @@ class ManutencaoController{
             })
         }
     }
-  
-    static async buscarPorId(req, res){
+
+    static async buscarPorId(req, res) {
         try {
-            const { id } = req.params;  
+            const { id } = req.params;
             const manutencao = await manutencaoService.buscarPorId(Number(id));
             res.status(200).json({
                 message: 'Manutenção encontrada',
                 manutencao: manutencao
             })
         }
-            catch (error) {
+        catch (error) {
             res.status(500).json({
                 message: 'erro ao buscar manutenção.'
             })
         }
     }
-    static async atualizar(req, res){
+    static async atualizar(req, res) {
         try {
             const { id } = req.params;
             const dadosAtualizados = req.body;
             const manutencaoAtualizada = await manutencaoService.atualizar(id, dadosAtualizados);
-        
+
             if (manutencaoAtualizada) {
                 res.status(200).json({
                     message: 'Manutenção atualizada com sucesso.',
                     manutencao: manutencaoAtualizada
                 });
-            } 
+            }
         } catch (error) {
             res.status(500).json({
                 message: 'erro ao atualizar manutenção.'
@@ -72,27 +73,48 @@ class ManutencaoController{
         }
     }
 
-    static async deletar(req, res){
-        try {   
+    static async iniciarManutencao(req, res) {
+        try {
+            const { data_inicio } = req.body;
+            const iniciar = await manutencaoService.iniciar(data_inicio);
+            if(iniciar === null) {
+                res.status(400).json({
+                    message: 'verifique os dados informados'
+                })
+            }
+
+            res.status(200).json({
+                message: 'Manutenção iniciada com sucesso.',
+                manutencao: iniciar
+            })
+        } catch (error) {
+                res.status(500).json({
+                    message: 'erro do servidor'
+                })
+        }
+    }
+
+    static async deletar(req, res) {
+        try {
             const { id } = req.params;
             const deletado = await manutencaoService.deletar(Number(id));
-           
+
             if (!deletado) {
-                 res.status(404).json({
+                res.status(404).json({
                     message: 'Manutenção não encontrada.'
                 });
             }
-             res.status(200).json({
+            res.status(200).json({
                 message: `Manutenção ${id} deletada com sucesso`
             });
         } catch (error) {
-             res.status(500).json({
+            res.status(500).json({
                 message: 'Erro interno ao deletar manutenção.',
                 error: error.message
             });
         }
     }
-    
+
 }
 
 module.exports = ManutencaoController

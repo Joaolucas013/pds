@@ -11,11 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Ordem_Servico.hasMany(models.Itens, {
-        foreignKey:'ordem_servico_id'
+      foreignKey: 'fk_Os'
       });
 
       Ordem_Servico.hasMany(models.Trabalha, {
-        foreignKey: 'ordem_servico_id' 
+        foreignKey: 'id_Os' 
       });
       Ordem_Servico.belongsTo(models.Manutencao, {
         foreignKey: 'manutencao_id'
@@ -27,16 +27,26 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.DECIMAL,
       allowNull: false
     },
+
+    id_Os: {
+        type: DataTypes.INTEGER,
+      primaryKey: true,
+      allowNull: false,
+       autoIncrement: true
+    }
+    ,
     problema: {
       type: DataTypes.STRING,
     },
+
     status: {
       type: DataTypes.STRING,
       enum: {
-        values: ["Aberto", "Em andamento", "Finalizada"]
-      }
-    }
-    ,
+        values: ["Aberta", "Em andamento", "Finalizada"]
+      },
+      defaultValue: 'Aberta'
+    },
+
     tipo: {
       type: DataTypes.STRING,
       enum: {

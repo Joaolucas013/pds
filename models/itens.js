@@ -11,7 +11,7 @@ module.exports = (sequelize, DataTypes) => {
       });
 
     Itens.belongsTo(models.Ordem_Servico, {
-      foreignKey: 'ordem_servico_id'
+      foreignKey: 'id_Os'
     })  
     }
   }
@@ -21,13 +21,22 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false
     },
 
+    id_Os:  {
+      type: DataTypes.INTEGER,
+      foreignKey: true,
+      primaryKey: true,
+      allowNull: false,
+    },
+
     fk_material: {
       primaryKey:true,
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      foreignKey: true,
+      allowNull: false
     },
     quantidade: {
       type: DataTypes.INTEGER,
-      allowNull: false
+      allowNull: false 
     },
 
 

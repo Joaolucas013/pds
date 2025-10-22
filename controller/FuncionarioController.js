@@ -11,6 +11,11 @@ class FuncionarioController {
         const dados = req.body
           
             const novoFuncionario = await funcionarioService.salvar(dados);
+            if(novoFuncionario === null){
+                res.status(400).json({
+                    message: 'verifique os dados informados.'
+                })
+            }
             return res.status(200).json({
                 message: 'funcionario cadastrado com sucesso.',
                 novoFuncionario

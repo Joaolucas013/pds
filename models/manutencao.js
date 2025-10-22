@@ -2,6 +2,7 @@
 const {
   Model
 } = require('sequelize');
+const { toDefaultValue } = require('sequelize/lib/utils');
 module.exports = (sequelize, DataTypes) => {
   class Manutencao extends Model {
    
@@ -20,8 +21,13 @@ module.exports = (sequelize, DataTypes) => {
     }
   } 
   Manutencao.init({
-    data_manutencao: {
-      type: DataTypes.DATEONLY
+    data_inicio: {
+      type: DataTypes.DATEONLY,
+      toDefaultValue: null
+    },
+ data_fim: {
+      type: DataTypes.DATEONLY,
+      toDefaultValue: null
     },
 
     fk_veiculo: {
