@@ -1,7 +1,7 @@
 
 
-const setor = require('../models/setor');
-const setorService = require('../service/SetorService');
+
+const setorService = require('../service/SetorService.js');
 
 class SetorController {
 

@@ -23,13 +23,23 @@ module.exports = (sequelize, DataTypes) => {
     data_manutencao: {
       type: DataTypes.DATEONLY
     },
+
+    fk_veiculo: {
+     allowNull: false,
+     type: DataTypes.STRING 
+    },
   
   id_manutencao: {
     type: DataTypes.TINYINT.UNSIGNED,
         autoIncrement: true,
         primaryKey: true,
+    },
+
+    fk_motorista: {
+      allowNull: false,
+      type: DataTypes.TINYINT.UNSIGNED
     }
-    
+  
 
   },
 

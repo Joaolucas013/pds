@@ -24,6 +24,15 @@ class FuncionarioService {
 
     }
 
+    static async buscar(id) {
+        const funcionario = await database.Funcionario.findByPk(id);    
+      
+        if (funcionario !== null) {
+            return funcionario;
+        }
+        return null;
+    }
+
     static async listar() {
         const funcionarios = await database.Funcionario.findAll();
 

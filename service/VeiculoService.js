@@ -1,17 +1,20 @@
 const database = require('../models');
-
-
-
+const modeloService = require('./ModeloService.js');
 
 class VeiculoService {
 
 
     static async salvar(dados) {
         try {
-            const newVeiculo = await database.Veiculo.create(dados);
-            return newVeiculo;
+            const { modelo_id } = dados
+            const modeloExists = await modeloService.buscarPorId(modelo_id);
+            if (modeloExists !== null) {
+                return await database.Veiculo.create(dados);
+            } else {
+                throw new Error(`modelo ${modelo_id} não existe.`);
+            }
         } catch (error) {
-            throw new Error(`Erro ao criar motorista: ${error.message}`);
+            throw new Error(`Erro ao criar veiculo: ${error.message}`);
         }
     }
 
@@ -19,7 +22,11 @@ class VeiculoService {
     static async buscar(id) {
         try {
             const veiculo = await database.Veiculo.findByPk(id);
-            return veiculo;
+            if (veiculo !== null) {
+                return veiculo;
+            } else {
+                return null
+            }
         } catch (error) {
             throw new Error(`Erro ao acessar o banco: ${error.message}`);
         }
@@ -56,6 +63,16 @@ class VeiculoService {
 
         return true;
     }
+
+    static async listar() {
+        try {
+            const veiculos = await database.Veiculo.findAll({});
+            return veiculos;
+        } catch (error) {
+            throw new Error(`Erro ao acessar o banco: ${error.message}`);
+        }
+    }
+
 
 }
 

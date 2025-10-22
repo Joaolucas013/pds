@@ -18,7 +18,13 @@ class MotoristaService {
     static async pesquisarMotorista(id) {
         try {
             const motorista = await database.Motorista.findByPk(id);
-            return motorista;
+
+            if (motorista !== null) {
+                return motorista;
+            } else {
+                return null
+            }
+
         } catch (error) {
             throw new Error(`Erro ao pesquisar motorista: ${error.message}`);
         }

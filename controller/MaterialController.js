@@ -10,10 +10,9 @@ class MaterialController {
         try {
             const material = req.body;
             const materialCadastrado = await materialService.criar(material);
-            const { createdAt, updatedAt, ...dados } = materialCadastrado.dataValues;
             res.status(201).json({
                 Message: 'material cadastrado com sucesso',
-                material: dados
+                material: materialCadastrado
             })
 
         } catch (error) {

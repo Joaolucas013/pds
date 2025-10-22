@@ -60,8 +60,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       defaultValue: true
     },
-
-    quilometragem: {
+modelo_id: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+ },
+ 
+   quilometragem: {
       type: DataTypes.DECIMAL,
       allowNull: false
     },

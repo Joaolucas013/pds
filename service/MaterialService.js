@@ -5,34 +5,42 @@ class MaterialService {
 
   static async criar(dados) {
     try {
+
+      const{descricao} = dados;
+      const materialExist = await this.buscarPorMaterial(descricao)
+      if(materialExist === null){
+        throw new Error('Material já cadastrado em nosso sistema')
+      }
       const material = await database.Material.create(dados);
       return material;
+      
+
     } catch (error) {
-      throw error;
+      throw new Error('erro ao cadastrar novo material')
     }
   }
 
   static async getAll() {
     try {
       const todosMateriais = await database.Material.findAll();
-      return todosMateriais;
+      return todosMateriais || [];
     } catch (error) {
-      throw error(error.message)
+      throw new Error(`Erro ao acessar o banco: ${error.message}`);
     }
   }
 
-  static async atualiza(id, dadosAtualizados) {
+  static async atualizaQuantidade(dadosAtualizados) {
 
-    const ListaMateriaisAtualizados = database.Material.update(dadosAtualizados, {
+    const {quantidadeNova, id } = dadosAtualizados;
+    const [listaMateriaisAtualizados] = database.Material.update({
+       quantidadeEstoque: quantidadeNova
+    }, {
       where: {
         id: id}
       });
 
-    if (ListaMateriaisAtualizados === 0) {
-      return false
-    }
-    return true;
-  }
+       return listaMateriaisAtualizados = 0 ? false : true;
+}
 
   static async deletar(id) {
     try {
@@ -42,11 +50,7 @@ class MaterialService {
         }
       })
 
-      if (materialDeletado > 0) {
-        return true
-      } else {
-        return false
-      }
+      return materialDeletado > 0 ? true : false;
     } catch (error) {
       throw new Error(`Erro ao deletar material: ${error.message}`);
     }
@@ -62,7 +66,7 @@ class MaterialService {
 
       return materialGet;
     } catch (error) {
-      throw error;
+     throw new Error('erro ao buscar por material')
     }
   }
 

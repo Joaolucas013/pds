@@ -14,9 +14,13 @@ class MotoristaController {
                 motorista: dados
             })
         } catch (error) {
-            throw error;
+             return res.status(500).json({
+      message: 'Erro ao criar motorista.',
+      error: error.message
+    });
         }
     }
+    
 
     static async pesquisarMotorista(req, res) {
         try {
