@@ -9,6 +9,8 @@ const procedimentoController = require('../controller/ProcedimentoController.js'
 const ModeloController = require('../controller/ModeloController.js')
 const manutencaoController =  require('../controller/ManutencaoController.js')
 const VeiculoMotoristaController = require('../controller/VeiculoMotoristaController.js')
+const ordemServicoController = require('../controller/OrdemServicoController.js')
+const itensController = require('../controller/ItensController.js')
 
 
 const rotas = Router();
@@ -78,7 +80,38 @@ rotas.delete("/modelo/:id", (req, res) => ModeloController.deletar(req, res));
     rotas.delete("/veiculoMotorista/delete", (req, res) => VeiculoMotoristaController.deletar(req, res));
     rotas.get("/veiculoMotorista/listar/ativos", (req, res) => VeiculoMotoristaController.listarVinculosAtivos(req, res));
     rotas.get("/veiculoMotorista/listar/inativos", (req, res) => VeiculoMotoristaController.listarVinculosInativos(req, res));
+
+
+   // manutencao
+   rotas.post("/manutencao/criar", (req, res) => manutencaoController.cadastrar(req, res));
+   rotas.get("/manutencao/listar", (req, res) => manutencaoController.listar(req, res));
+   rotas.get("/manutencao/buscar/:id", (req, res) => manutencaoController.buscarPorId(req, res));
+   rotas.put("/manutencao/atualizar/:id", (req, res) => manutencaoController.atualizar(req, res));
+    rotas.delete("/manutencao/deletar/:id", (req, res) => manutencaoController.deletar(req, res));
+    rotas.put("/manutencao/iniciar", (req, res) => manutencaoController.iniciarManutencao(req, res));
+    rotas.put("/manutencao/iniciar", (req, res) => manutencaoController.iniciarManutencao(req, res));
+    rotas.put("/manutencao/finalizar", (req, res) => manutencaoController.finalizarManutencao(req, res));
+
     
+    // os
+    rotas.post("/os/criar", (req, res) => ordemServicoController.cadastrarOs(req, res));
+    rotas.put("/os/atualizar/:id_manutencao", (req, res) => ordemServicoController.atualizarStatus(req, res));
+    rotas.get("/os/buscar/:id", (req, res) => ordemServicoController.buscarPorId(req, res));
+    rotas.get("/os/listar", (req, res) => ordemServicoController.listar(req, res));
+    rotas.delete("/os/deletar/:id", (req, res) => ordemServicoController.deletar(req, res));
+    
+    // itens
+    rotas.post("/itens/adicionar", (req, res) => itensController.cadastrarItem(req, res));  
+    rotas.put("/itens/atualizar/preco", (req, res) => itensController.atualizarPreco(req, res));  
+    rotas.put("/itens/atualizar/quantidade", (req, res) => itensController.atualizarQuantidade(req, res));  
+    rotas.delete("/itens/deletar", (req, res) => itensController.deletar(req, res));   
+    rotas.get("/itens/listar", (req, res) => itensController.listar(req, res)); 
+
+
+
+
+
+
 
 
 

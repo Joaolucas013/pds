@@ -11,10 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       Ordem_Servico.hasMany(models.Itens, {
-      foreignKey: 'fk_Os'
+      foreignKey: 'id_Os'
       });
 
-      Ordem_Servico.hasMany(models.Trabalha, {
+      Ordem_Servico.hasMany(models.Trabalha, { 
         foreignKey: 'id_Os' 
       });
       Ordem_Servico.belongsTo(models.Manutencao, {
@@ -56,10 +56,10 @@ module.exports = (sequelize, DataTypes) => {
     }
     ,
     data_abertura: {
-      type: DataTypes.DATE
+      type: DataTypes.DATEONLY
     },
     data_fechamento: {
-      type: DataTypes.DATE,
+      type: DataTypes.DATEONLY,
     },
     valor_total_itens: {
       type: DataTypes.DECIMAL,

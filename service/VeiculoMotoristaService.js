@@ -15,7 +15,7 @@ class VeiculoMotoristaService {
             const verifica = await this.#verificaExistencia(veiculo_id, motorista_id);
 
             if (!verifica) {
-                throw new Error("Motorista ou veículo não encontrado.");
+                throw new Error("Motorista ou veículo não encontradoaa.");
             }
 
             const newVeiculoMotorista = await database.Veiculo_Motorista.create({

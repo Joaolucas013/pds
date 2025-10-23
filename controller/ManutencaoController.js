@@ -3,8 +3,6 @@ const manutencaoService = require('../service/ManutencaoService');
 
 class ManutencaoController {
 
-
-
     static async cadastrar(req, res) {
         try {
             const dados = req.body;
@@ -54,11 +52,14 @@ class ManutencaoController {
             })
         }
     }
+
+
     static async atualizar(req, res) {
         try {
-            const { id } = req.params;
-            const dadosAtualizados = req.body;
-            const manutencaoAtualizada = await manutencaoService.atualizar(id, dadosAtualizados);
+
+            const { dadosAtualizados } = req.body;
+            const { id } = dadosAtualizados;
+            const manutencaoAtualizada = await manutencaoService.atualizar(dadosAtualizados);
 
             if (manutencaoAtualizada) {
                 res.status(200).json({
@@ -75,9 +76,9 @@ class ManutencaoController {
 
     static async iniciarManutencao(req, res) {
         try {
-            const { data_inicio } = req.body;
-            const iniciar = await manutencaoService.iniciar(data_inicio);
-            if(iniciar === null) {
+            const { id_manutencao, data_inicio } = req.body;
+            const iniciar = await manutencaoService.iniciar(id_manutencao, data_inicio);
+            if (iniciar === null) {
                 res.status(400).json({
                     message: 'verifique os dados informados'
                 })
@@ -88,9 +89,9 @@ class ManutencaoController {
                 manutencao: iniciar
             })
         } catch (error) {
-                res.status(500).json({
-                    message: 'erro do servidor'
-                })
+            res.status(500).json({
+                message: 'erro do servidor'
+            })
         }
     }
 
@@ -112,6 +113,30 @@ class ManutencaoController {
                 message: 'Erro interno ao deletar manutenção.',
                 error: error.message
             });
+        }
+    }
+
+    static async finalizarManutencao(req, res) {
+        try {
+            const { data_fim, id_manutencao } = req.body;
+            const manutencaoFinalizada = await manutencaoService.finalizar(id_manutencao, data_fim);
+            if (manutencaoFinalizada === null) {
+                res.status(400).json({
+                    message: 'verifique a validade dos dados informados'
+                });
+            }
+
+            res.status(200).json({
+                message: 'Manutenção finalizada com sucesso.',
+                manutencao: manutencaoFinalizada
+            });
+
+
+        } catch (error) {
+            res.status(500).json({
+                message: 'erro do servidor',
+                error: error.message
+            })
         }
     }
 

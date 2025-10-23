@@ -26,8 +26,14 @@ class MaterialController {
     static async listarMaterial(req, res) {  // r
         try {
             const materiais = await materialService.getAll();
+            if(materiais.length === 0){
+                return res.status(404).json({
+                    message: 'nenhum material cadastrado.'
+                })
+            }
+
             res.status(200).json({
-                message: 'materiais:',
+                message: 'lista de materiais:',
                 material: materiais
             })
         } catch (error) {

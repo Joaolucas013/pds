@@ -1,21 +1,39 @@
-const manutencaoService = require('./ManutencaoService.js')
-const database = require('../models');
 
+const database = require('../models');
+const manutencaoRepository = require('../service/ManutencaoRepository.js');
 
 class OrdemServicoService {
 
-    // static async cadastrar(dados) {
-    //     const { manutencao_id } = dados;
-    //     const manutencaoExists = await manutencaoService.buscarPorId(manutencao_id);
+    static async cadastrar(dados) {
+       
+        const { manutencao_id, quilometragem_atual, problema, tipo, data_abertura, prioridade } = dados;
+        const manutencaoExists = await manutencaoRepository.buscarPorId(manutencao_id);
+
+        if (manutencaoExists == null) return null;
+
+        const newOs = await database.Ordem_Servico.create({
+            manutencao_id: manutencao_id,
+            quilometragem_atual: quilometragem_atual,
+            problema: problema,
+            tipo: tipo,
+            data_abertura: data_abertura,
+            prioridade: prioridade,
+        }
+        )
+
+        return newOs;
+    }
+
+    static async buscarPeloId(id) {
+        const ordemServico = await database.Ordem_Servico.findByPk(id);
+        if (ordemServico !== null) {
+            return ordemServico;
+        }
+        return null;
+    }
 
 
-    //     const verificaManutencao = 
-    //  }
-
-
-
-
-    static async atualizaStatus(novoStatus, id_manutencao, data_fim) {
+    static async atualizaStatusPelaManutencao(novoStatus, id_manutencao, data_fim) {
         const arrayUp = {};
 
         if (data_fim !== null) {
@@ -23,7 +41,9 @@ class OrdemServicoService {
         }
 
         arrayUp.status = novoStatus;
-        const [statusAtualizado] = await database.Ordem_Servico.update(arrayUp,
+        const [statusAtualizado] = await database.Ordem_Servico.update({
+            ...arrayUp
+        },
             {
                 where: {
                     manutencao_id: id_manutencao
@@ -32,56 +52,69 @@ class OrdemServicoService {
             });
 
         return statusAtualizado > 0;
-    
+
     }
 
+    static async deletar(id) {
+        try {
+            const deletar = await database.Ordem_Servico.destroy({
+                where: {
+                    id_Os: id
+                }
+            });
+
+            if (deletar === 0) {
+                return false;
+            }
+        } catch (error) {
+            throw new Error(`Erro ao acessar o banco: ${error.message}`);
+        }
+        return true;
+
+    }
+
+    static async listar() {
+        try {
+            const ordensServico = await database.Ordem_Servico.findAll({});
+            if (ordensServico.length === 0) {
+                return null;
+            }
+            return ordensServico;
+        } catch (error) {
+            throw new Error(`Erro ao acessar o banco: ${error.message}`);
+        }
+    }
+
+    static async atualizaValorTotalItens() {
+
+    }
+
+    static async InserireAtualizarTotalItens(total, id_Os) {
+
+        const { valor_total_itens } = await database.Ordem_Servico.findOne({
+            where: {
+                id_Os: id_Os
+            }
+        });
+
+        const novoTotal = valor_total_itens + total;
+
+        const [atualizado] = await database.Ordem_Servico.update(
+            { valor_total_itens: novoTotal },
+            {
+                where: {
+                    id_Os: id_Os
+                }
+            })
+
+        if (!atualizado > 0) {
+            throw new Error(`Erro ao atualizar o valor total dos itens`);
+        }
+        return true;
+
+
+    }
 }
 
-
-/*
- quilometragem_atual: {
-      type: DataTypes.DECIMAL,
-      allowNull: false
-    },
-    problema: {
-      type: DataTypes.STRING,
-    },
-    status: {
-      type: DataTypes.STRING,
-      enum: {
-        values: ["Aberto", "Em andamento", "Finalizada"]
-      }
-    }
-    ,
-    tipo: {
-      type: DataTypes.STRING,
-      enum: {
-        values: ["Preventiva", "Corretiva"],
-        message: 'Tipo de Manutencao informada está incorreta'
-      }
-    }
-    ,
-    data_abertura: {
-      type: DataTypes.DATE
-    },
-    data_fechamento: {
-      type: DataTypes.DATE,
-    },
-    valor_total_itens: {
-      type: DataTypes.DECIMAL,
-    },
-    valor_total_procedimento: {
-      type: DataTypes.DECIMAL
-    },
-
-    prioridade: {
-      type: DataTypes.STRING,
-      enum: {
-        values: ["Baixa", "Alta", "Media"],
-        message: 'A prioridade informada não existe'
-      }
-    }
-
-*/
 
 module.exports = OrdemServicoService;

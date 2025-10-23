@@ -8,54 +8,68 @@ class ItensService {
 
     static async cadastrar(dados) {
 
-        const { os_id, material_id } = dados;
-        const verifica = await verificaExistencia(os_id, material_id);
+
+        const { id_Os, fk_material, quantidade } = dados;
+        const verifica = await this.#verificaExistencia(id_Os, fk_material);
 
         if (!verifica) return null;
 
-        const newVinculo = await database.Itens.create();
+        const { valorUnitario } = await material.buscarMaterialId(fk_material)
+
+        const dadosValidos = {};
+        dadosValidos.valor_unitario = valorUnitario;
+        dadosValidos.quantidade = quantidade;
+        dadosValidos.fk_material = fk_material;
+        dadosValidos.id_Os = id_Os;
+
+        const newVinculo = await database.Itens.create(dadosValidos)
+
+        await this.#insereTotalOs(quantidade, valorUnitario, id_Os);
+        await this.#decQuantidadeMaterial(quantidade, fk_material)
+
         return newVinculo;
 
     }
 
-
     static async listar() {
-            const itens = await database.Itens.findAll();
-             if (itens !== null) {
-                return itens;
-            }
-            return null;
-        } 
+        const itens = await database.Itens.findAll();
 
 
-        static async atualizarPreco(dados) {
+        if (itens.length > 0) {
+            return itens;
+        }
+
+        return null;
+    }
+
+
+    static async atualizarPreco(dados) {
         const { id_material, id_os, precoNovo } = dados;
 
-        const verifica = await verificaExistencia(os_id, id_material);
+        const verifica = await this.#verificaExistencia(id_os, id_material);
 
         if (!verifica) return false;
 
 
         const [itemUpdate] = await database.Itens.update({
-           preco_unitario: precoNovo
+            valor_unitario: precoNovo
 
         },
             {
                 where: {
                     fk_material: id_material,
-                    fk_Os: id_os
+                    id_Os: id_os
                 }
             });
 
+        // aqui tem que atualizar o preco na os
         return itemUpdate > 0;
-
-
     }
-    
-static async atualizarQuantidade(dados) {
+
+    static async atualizarQuantidade(dados) {
         const { id_material, id_os, quantidade } = dados;
 
-        const verifica = await verificaExistencia(os_id, id_material);
+        const verifica = await this.#verificaExistencia(os_id, id_material);
 
         if (!verifica) return false;
 
@@ -71,6 +85,12 @@ static async atualizarQuantidade(dados) {
                 }
             });
 
+
+        const dec = await this.#decQuantidadeMaterial(quantidade, id_material)
+        if (!dec) {
+            return false;
+        }
+
         return itemUpdate > 0;
 
 
@@ -78,21 +98,21 @@ static async atualizarQuantidade(dados) {
 
 
     static async atualizarMaterial(dados) {
-        const { id_material, novoMaterial, id_os, novo_valor_unitario, quantidade } = dados;
+        const { id_material, novoIdMaterial, id_os } = dados;
 
-        const verifica = await verificaExistencia(os_id, id_material);
+        const verifica = await this.#verificaExistencia(id_os, id_material);
 
         if (!verifica) return false;
 
 
         const [itemUpdate] = await database.Itens.update({
-            id_material:novoMaterial
+            id: novoIdMaterial
 
         },
             {
                 where: {
                     fk_material: id_material,
-                    fk_Os: id_os
+                    id_Os: id_os
                 }
             });
 
@@ -104,7 +124,7 @@ static async atualizarQuantidade(dados) {
     static async deletar(dados) {
 
         const { id_material, id_os } = dados;
-        const verifica = await verificaExistencia(os_id, id_material);
+        const verifica = await this.#verificaExistencia(os_id, id_material);
 
         if (!verifica) return false;
 
@@ -124,16 +144,32 @@ static async atualizarQuantidade(dados) {
         try {
 
             const os_Exists = await ordemServico.buscarPeloId(os_id);
-            const materialExist = await material.buscarPorMaterial(material_id);
+            const materialExist = await material.buscarMaterialId(material_id);
 
             if (os_Exists === null || materialExist === null) {
                 return false;
             }
-
+            return true;
 
         } catch (error) {
-            throw new Error('erro do servidor');
+            throw new Error('erro ao buscar material ou ordem de serviço');
         }
+    }
+
+
+    static async #decQuantidadeMaterial(quantidade, fk_material) {
+        const mat = await material.decrementarQuantidade(quantidade, fk_material);
+
+        if (mat) {
+            return true
+        }
+
+        return false;
+    }
+
+    static async #insereTotalOs(quantidade, valorUnitario, id_Os) {
+        const total = quantidade * valorUnitario;
+        await ordemServico.InserireAtualizarTotalItens(total, id_Os)
     }
 
 }
