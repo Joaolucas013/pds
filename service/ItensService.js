@@ -169,7 +169,7 @@ class ItensService {
 
     static async #insereTotalOs(quantidade, valorUnitario, id_Os) {
         const total = quantidade * valorUnitario;
-        await ordemServico.InserireAtualizarTotalItens(total, id_Os)
+        await ordemServico.InserireAtualizarTotalItensPelaItemService(total, id_Os)
     }
 
 }

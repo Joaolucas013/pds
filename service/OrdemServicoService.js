@@ -5,7 +5,7 @@ const manutencaoRepository = require('../service/ManutencaoRepository.js');
 class OrdemServicoService {
 
     static async cadastrar(dados) {
-       
+
         const { manutencao_id, quilometragem_atual, problema, tipo, data_abertura, prioridade } = dados;
         const manutencaoExists = await manutencaoRepository.buscarPorId(manutencao_id);
 
@@ -85,11 +85,9 @@ class OrdemServicoService {
         }
     }
 
-    static async atualizaValorTotalItens() {
 
-    }
 
-    static async InserireAtualizarTotalItens(total, id_Os) {
+    static async InserireAtualizarTotalItensPelaItemService(total, id_Os) {
 
         const { valor_total_itens } = await database.Ordem_Servico.findOne({
             where: {
@@ -112,8 +110,9 @@ class OrdemServicoService {
         }
         return true;
 
-
     }
+
+
 }
 
 
