@@ -1,6 +1,7 @@
 
 const database = require('../models');
 const manutencaoRepository = require('../service/ManutencaoRepository.js');
+const itensService = require('./ItensService.js')
 
 class OrdemServicoService {
 
@@ -57,15 +58,20 @@ class OrdemServicoService {
 
     static async deletar(id) {
         try {
+
+            const id_Os = await this.buscarPeloId(id);
             const deletar = await database.Ordem_Servico.destroy({
                 where: {
                     id_Os: id
                 }
             });
-
-            if (deletar === 0) {
+                if (deletar === 0) {
                 return false;
             }
+            const incrementarEmItensMaterial = await itensService.deletaEmItens(id_Os);
+
+            
+            
         } catch (error) {
             throw new Error(`Erro ao acessar o banco: ${error.message}`);
         }

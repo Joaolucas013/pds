@@ -33,9 +33,7 @@ class ItensService {
 
     static async listar() {
         const itens = await database.Itens.findAll();
-
-
-        if (itens.length > 0) {
+         if (itens.length > 0) {
             return itens;
         }
 
@@ -43,39 +41,40 @@ class ItensService {
     }
 
 
-    static async atualizarPreco(dados) {
-        const { id_material, id_os, precoNovo } = dados;
-
-        const verifica = await this.#verificaExistencia(id_os, id_material);
-
-        if (!verifica) return false;
-
-
-        const [itemUpdate] = await database.Itens.update({
-            valor_unitario: precoNovo
-
-        },
-            {
-                where: {
-                    fk_material: id_material,
-                    id_Os: id_os
-                }
-            });
-
-        // aqui tem que atualizar o preco na os
-        return itemUpdate > 0;
-    }
 
     static async atualizarQuantidade(dados) {
-        const { id_material, id_os, quantidade } = dados;
+        const { id_material, id_os, novaQuantidade } = dados; // novaQuantidade = 20
 
-        const verifica = await this.#verificaExistencia(os_id, id_material);
-
+        const verifica = await this.#verificaExistencia(id_os, id_material);
         if (!verifica) return false;
 
 
+        const material = await material.buscarMaterialId(id_material);
+        const buscaItem = await this.buscaItem(id_material, id_os);
+        const { quantidade } = buscaItem;   // 10
+        const { quantidadeEstoque } = material;
+
+        if (buscaItem === null) {
+            return false;
+        }
+
+        const diferenca = novaQuantidade - quantidade;  // 20 - 10 == -10 usou mais material, tem q decrementar
+
+        if (diferenca > 0  && quantidadeEstoque < diferenca) {
+            return false; 
+            
+        }
+
+        if (diferenca > 0) {
+            await this.#decQuantidadeMaterial(diferenca, id_material);
+        } else {
+            diferenca *= -1;
+            await this.#incrQuantidadeMaterial(diferenca, id_material);
+        }
+
+
         const [itemUpdate] = await database.Itens.update({
-            quantidade: quantidade
+            quantidade: novaQuantidade
 
         },
             {
@@ -85,59 +84,64 @@ class ItensService {
                 }
             });
 
-
-        const dec = await this.#decQuantidadeMaterial(quantidade, id_material)
-        if (!dec) {
+        if (!itemUpdate > 0) {
             return false;
         }
 
+
         return itemUpdate > 0;
-
-
     }
 
 
-    static async atualizarMaterial(dados) {
-        const { id_material, novoIdMaterial, id_os } = dados;
-
-        const verifica = await this.#verificaExistencia(id_os, id_material);
-
-        if (!verifica) return false;
-
-
-        const [itemUpdate] = await database.Itens.update({
-            id: novoIdMaterial
-
-        },
-            {
-                where: {
-                    fk_material: id_material,
-                    id_Os: id_os
+    static async buscaItem(id_material, id_os) {
+        try {
+            const dados = await database.Itens.findOne(
+                {
+                    where: {
+                        fk_material: id_material,
+                        id_Os: id_os
+                    }
                 }
-            });
-
-        return itemUpdate > 0;
-
+            );
+            return dados;
+        } catch (error) {
+            throw new Error('erro ao buscar item')
+        }
 
     }
 
-    static async deletar(dados) {
 
-        const { id_material, id_os } = dados;
-        const verifica = await this.#verificaExistencia(os_id, id_material);
+    static async deletaEmItens(id_Os) {
 
-        if (!verifica) return false;
-
-        const itemDeletado = await database.Itens.destroy({
+        const listaItens = await database.Itens.findAll({
             where: {
-                fk_material: id_material,
-                fk_Os: id_os
+                id_Os: id_Os
             }
-        })
+        });
 
-        return itemDeletado > 0;
+        if (listaItens === null) {
+            return false;
+        }
+
+        for (let i = 0; i < listaItens.length; i++) {
+            const { quantidade, fk_material } = listaItens[i];
+            const incrementarEmMaterial = await this.#incrQuantidadeMaterial(quantidade, fk_material);
+
+        }
+
+        const relacaoDeletada = await database.Itens.destroy({
+            where: {
+                id_Os: id_Os
+            }
+        });
+
+        if (relacaoDeletada === 0) {
+            return false;
+        }
+        return true;
 
     }
+
 
 
     static async  #verificaExistencia(os_id, material_id) {
@@ -167,9 +171,35 @@ class ItensService {
         return false;
     }
 
+
+    static async #incrQuantidadeMaterial(quantidade, fk_material) {
+        const mat = await material.incrementarEmMaterial(quantidade, fk_material);
+
+        if (mat) {
+            return true
+        }
+
+        return false;
+    }
+
     static async #insereTotalOs(quantidade, valorUnitario, id_Os) {
         const total = quantidade * valorUnitario;
         await ordemServico.InserireAtualizarTotalItensPelaItemService(total, id_Os)
+    }
+
+
+    static async buscarItens(id_Os) {
+        try {
+            const item = await database.Itens.findOne({
+                where: {
+                    id_Os: id_Os
+                }
+            });
+            return item;
+        } catch (error) {
+            throw new Error(`Erro ao acessar o banco: ${error.message}`);
+        }
+        return null;
     }
 
 }

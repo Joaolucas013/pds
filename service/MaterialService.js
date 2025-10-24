@@ -97,19 +97,19 @@ class MaterialService {
     }
   }
 
-  static async decrementarQuantidade(quantidade, fk_material, ){
+  static async decrementarQuantidade(quantidade, fk_material,) {
 
     try {
-      const{ quantidadeEstoque} = await this.buscarMaterialId(fk_material);
+      const { quantidadeEstoque } = await this.buscarMaterialId(fk_material);
       const novaQtd = quantidadeEstoque - quantidade;
 
-         if (novaQtd < 0) {
-          throw new Error(`Quantidade em estoque insuficiente para decrementar. 
+      if (novaQtd < 0) {
+        throw new Error(`Quantidade em estoque insuficiente para decrementar. 
             Apenas ${quantidadeEstoque} disponiveis no estoque`);
-       }
+      }
 
-      const [updateMaterial] =  await database.Material.update({
-      quantidadeEstoque: novaQtd
+      const [updateMaterial] = await database.Material.update({
+        quantidadeEstoque: novaQtd
       }, {
         where: {
           id: fk_material
@@ -117,10 +117,42 @@ class MaterialService {
       });
 
     } catch (error) {
-      throw new Error('erro ao atualizar quantidade:' , error.message)
+      throw new Error('erro ao atualizar quantidade:', error.message)
     }
     return true
   }
+
+
+  static async incrementarEmMaterial(quantidade, fk_material,) {
+
+    try {
+      const { quantidadeEstoque } = await this.buscarMaterialId(fk_material);
+      const novaQtd = quantidadeEstoque + quantidade;
+
+      if (novaQtd < 0) {
+        throw new Error(`Quantidade em estoque insuficiente para decrementar. 
+            Apenas ${quantidadeEstoque} disponiveis no estoque`);
+      }
+
+      const [updateMaterial] = await database.Material.update({
+        quantidadeEstoque: novaQtd
+      }, {
+        where: {
+          id: fk_material
+        }
+      });
+
+      if (!updateMaterial > 0) {
+        throw new Error(`Erro ao atualizar a quantidade do material: ${error.message}`);
+      }
+
+    } catch (error) {
+      throw new Error('erro ao atualizar quantidade:', error.message)
+    }
+    return true
+  }
+
+
 
 
 }
