@@ -71,7 +71,7 @@ class OrdemServicoService {
             const incrementarEmItensMaterial = await itensService.deletaEmItens(id_Os);
 
             
-            
+
         } catch (error) {
             throw new Error(`Erro ao acessar o banco: ${error.message}`);
         }
@@ -118,6 +118,44 @@ class OrdemServicoService {
 
     }
 
+    static async pesquisarPorStatus(status) {
+        try {
+            const ordensServico = await database.Ordem_Servico.findAll({ 
+                where: {
+                    status: status
+                }
+            });
+            if (ordensServico.length === 0) {
+                return null;
+            }
+            return ordensServico;
+        } catch (error) {
+            throw new Error(`Erro ao acessar o banco: ${error.message}`);
+        }
+            
+    }
+    
+
+    static async statusPrioridade(status, prioridade){ 
+        try {
+            const filtro = {};
+            filtro.status = status;
+            filtro.prioridade = prioridade
+            const ordensServico = await database.Ordem_Servico.findAll({ 
+                where: {
+                    ...filtro
+                }
+            });
+            
+            if (ordensServico.length === 0) {
+              throw new Error(`verifique os dados informados.`);
+            }
+            return ordensServico;
+        } catch (error) {
+            throw new Error(`Erro ao acessar o banco: ${error.message}`);
+        }
+            
+    }
 
 }
 

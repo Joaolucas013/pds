@@ -25,7 +25,7 @@ class OrdemServicoController{
 
     }
 
-    
+
     static async buscarPorId(req, res){ 
         try {
             const { id } = req.params;
@@ -86,8 +86,48 @@ class OrdemServicoController{
         }
     }
 
+    static async pesquisarOsPorStatus(req, res){
+        try {
+            const { status } = req.params;  
+            const osEncontrada = await ordemService.pesquisarPorStatus(status);
+            if(osEncontrada === null){
+                return res.status(404).json({
+                    message: 'Nenhuma ordem de serviço encontrada com esse status.'
+                })
+            }
+            return res.status(200).json({
+                message: 'Ordem de serviço encontrada:',
+                osEncontrada
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: 'Erro no servidor'
+            })
+        }
+
+    }
 
 
+     static async pesquisarOsPorStatusPrioridade(req, res){
+        try {
+            const { status, prioridade } = req.body;  
+            const osEncontrada = await ordemService.statusPrioridade(status, prioridade);
+            if(osEncontrada === null){
+                return res.status(404).json({
+                    message: 'Nenhuma ordem de serviço encontrada com esse status.'
+                })
+            }
+            return res.status(200).json({
+                message: 'Ordem de serviço encontrada:',
+                osEncontrada
+            })
+        } catch (error) {
+            res.status(500).json({
+                message: 'Erro no servidor'
+            })
+        }
 
+
+}
 }
 module.exports = OrdemServicoController;

@@ -31,7 +31,7 @@ class ItensController {
     static async atualizarPreco(req, res){
         try {
             const dados = req.body; 
-            const atualizado = await itensService.atualizarPreco(dados);
+            const atualizado = await itensService.atualizarPreco(dados);   // falta fazer
             if(atualizado){
                 res.status(200).json({
                     message: 'Preco do item atualizada com sucesso.'
@@ -79,21 +79,7 @@ class ItensController {
 
     }
 
-    static async atualizarMaterial(req, res){
-        try {
-            const dados = req.body;
-            const atualizado = await itensService.atualizarMaterial(dados); 
-            if(atualizado){
-                res.status(200).json({
-                    message: 'Item atualizado com sucesso.'
-                })
-            }
-        } catch (error) {
-            res.status(500).json({
-                message: 'erro ao atualizar Item.'
-            })
-        }
-    }
+  
 
     static async deletar(req, res){
         try {
