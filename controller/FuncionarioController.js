@@ -52,7 +52,7 @@ class FuncionarioController {
     static async listar(req, res) {
         try {
 
-            const funcGetAll = await funcionarioService.listar()
+            const funcGetAll = await funcionarioService.listar(req)
             if (funcGetAll !== null) {
                 res.status(200).json({
                     funcionarios: funcGetAll
@@ -90,7 +90,7 @@ class FuncionarioController {
     static async pesquisarFuncionario(req, res) {
         try {
             const { nome } = req.body
-            const funcionario = await funcionarioService.pesquisarPeloNome(nome);
+            const funcionario = await funcionarioService.pesquisarPeloNome(req, nome);
 
             if (funcionario[0] !== null) {
                 res.status(200).json({

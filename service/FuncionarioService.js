@@ -23,10 +23,10 @@ class FuncionarioService {
             }
 
             const func = await database.Funcionario.create(dados);
-            const {data_demissao, ...novoFunc} = func.dataValues;
+            const { data_demissao, ...novoFunc } = func.dataValues;
             return novoFunc;
 
-           
+
         } catch (error) {
             throw new Error('Erro do servidorr')
         }
@@ -42,14 +42,26 @@ class FuncionarioService {
         return null;
     }
 
-    static async listar() {
-        const funcionarios = await database.Funcionario.findAll();
+    static async listar(req) {
 
-        if (funcionarios !== null) {
+        let { limite = 5, paginas = 1, ordenacao = "id.DESC" } = req.query;
+        limite = parseInt(limite);
+        paginas = parseInt(paginas);
+
+        let [campoOrdenado, ordem] = ordenacao.split(".");
+
+        if (limite > 0 && paginas > 0) {
+
+            const funcionarios = await database.Funcionario.findAll({
+                order: [[campoOrdenado, ordem.toUpperCase() === 'DESC' ? "DESC" : "ASC"]],
+                limit: limite,
+                offset: (paginas - 1) * limite     // pagina = 2 --> 2 - 1 = 1 * 5 = 5 --> pula 5 
+            })
+
             return funcionarios;
-        } else {
-            return null;
         }
+
+        return null;
     }
 
 
@@ -112,25 +124,34 @@ class FuncionarioService {
 
     }
 
-    static async pesquisarPeloNome(nome) {
+    static async pesquisarPeloNome(req, nome) {
         try {
             const busca = {};
+            let { paginas = 1, limite = 5, ordenacao = "id.asc" } = req.query
+
+            let [campoOrdenado, ordem] = ordenacao.split(".")
 
             busca.nome = {
-                    [Op.like]: `%${nome}%`
-                }
-        
-            const funcionarios =  await database.Funcionario.findAll({
-                where: 
-                    busca
-              })
+                [Op.like]: `%${nome}%`
+            }
 
-              return funcionarios;
+            const funcionarios = await database.Funcionario.findAll({
+                where:busca,
+                order: [[campoOrdenado, ordem.toUpperCase() === "DESC" ? "DESC" : "ASC"]],
+                limit: limite,
+                offset: (paginas - 1) * limite
+            }
+
+            )
+            return funcionarios;
         } catch (error) {
             throw new Error('funcionario nao encontrado');
         }
     }
 
 }
+
+
+
 
 module.exports = FuncionarioService;
