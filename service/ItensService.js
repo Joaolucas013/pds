@@ -60,7 +60,7 @@ class ItensService {
 
         const diferenca = novaQuantidade - quantidade;  // 20 - 10 == -10 usou mais material, tem q decrementar
 
-        if (diferenca > 0  && quantidadeEstoque < diferenca) {
+        if (quantidadeEstoque < diferenca) {
             return false; 
             
         }
