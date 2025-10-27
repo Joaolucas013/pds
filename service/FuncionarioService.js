@@ -1,3 +1,4 @@
+const { Op } = require('sequelize');
 const database = require('../models');
 const setor = require('./SetorService.js')
 
@@ -7,31 +8,34 @@ class FuncionarioService {
     static async salvar(dados) {
 
         try {
-           
-             const { setor_id, cpf } = dados;
-            const  validaCpf = await validacao(cpf);
 
-            if(!validaCpf){
+            const { setor_id, cpf } = dados;
+            const validaCpf = await this.#validacao(cpf);
+
+            if (!validaCpf) {
                 return null;
             }
 
             const setorId = await setor.buscarPeloId(setor_id)
 
             if (setorId === null) {
-                 return null
+                return null
             }
 
-             const func = await database.Funcionario.create(dados);
-            return func;
+            const func = await database.Funcionario.create(dados);
+            const {data_demissao, ...novoFunc} = func.dataValues;
+            return novoFunc;
+
+           
         } catch (error) {
-             throw new Error('Erro do servidor')
+            throw new Error('Erro do servidorr')
         }
 
     }
 
     static async buscar(id) {
-        const funcionario = await database.Funcionario.findByPk(id);    
-      
+        const funcionario = await database.Funcionario.findByPk(id);
+
         if (funcionario !== null) {
             return funcionario;
         }
@@ -41,7 +45,7 @@ class FuncionarioService {
     static async listar() {
         const funcionarios = await database.Funcionario.findAll();
 
-      if (funcionarios !== null) {
+        if (funcionarios !== null) {
             return funcionarios;
         } else {
             return null;
@@ -62,7 +66,6 @@ class FuncionarioService {
             return null;
         }
     }
-
 
 
 
@@ -97,23 +100,37 @@ class FuncionarioService {
 
     }
 
-    static async #validacao(cpf){
+    static async #validacao(cpf) {
 
-       const  funcionarioExists = await this.buscar(cpf);
+        const funcionarioExists = await this.buscar(cpf);
 
-       if(funcionarioExists !==null){
-        return false;
-       }
+        if (funcionarioExists !== null) {
+            return false;
+        }
 
-       return true;
+        return true;
 
     }
 
+    static async pesquisarPeloNome(nome) {
+        try {
+            const busca = {};
+
+            busca.nome = {
+                    [Op.like]: `%${nome}%`
+                }
+        
+            const funcionarios =  await database.Funcionario.findAll({
+                where: 
+                    busca
+              })
+
+              return funcionarios;
+        } catch (error) {
+            throw new Error('funcionario nao encontrado');
+        }
+    }
+
 }
-
-    
-
-
-
 
 module.exports = FuncionarioService;

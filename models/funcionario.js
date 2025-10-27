@@ -10,6 +10,7 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
   static associate(models) {
+
   Funcionario.belongsTo(models.Setor, {
     foreignKey: {
       name: 'setor_id',        
@@ -41,6 +42,7 @@ module.exports = (sequelize, DataTypes) => {
 
     situacao:{
       type:  DataTypes.BOOLEAN,
+      defaultValue: true
     },
 
     data_admissao: {
@@ -48,7 +50,8 @@ module.exports = (sequelize, DataTypes) => {
     },
 
     data_demissao: {
-      type:  DataTypes.DATEONLY
+      type:  DataTypes.DATEONLY,
+      defaultValue: null
     }
   }, {
     sequelize,

@@ -51,6 +51,7 @@ rotas.post("/funcionario/post", (req, res) => FuncionarioController.cadastrar(re
 rotas.put("/funcionario/update", (req, res) => FuncionarioController.atualizar(req, res));
 rotas.get("/funcionario/listar", (req, res) => FuncionarioController.listar(req, res));
 rotas.delete("/funcionario/deletar/:id", (req, res) => FuncionarioController.deletar(req, res));
+rotas.get("/funcionario/busca", (req, res) => FuncionarioController.pesquisarFuncionario(req, res));
 
 // procedimento
 rotas.post("/procedimento/cadastrar", (req, res) => procedimentoController.cadastrar(req, res));

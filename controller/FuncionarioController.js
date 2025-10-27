@@ -8,15 +8,17 @@ class FuncionarioController {
 
     static async cadastrar(req, res) {
         try {
-        const dados = req.body
-          
+            const dados = req.body
+
             const novoFuncionario = await funcionarioService.salvar(dados);
-            if(novoFuncionario === null){
+
+            if (novoFuncionario === null) {
                 res.status(400).json({
                     message: 'verifique os dados informados.'
                 })
             }
-            return res.status(200).json({
+
+            res.status(200).json({
                 message: 'funcionario cadastrado com sucesso.',
                 novoFuncionario
             })
@@ -47,45 +49,63 @@ class FuncionarioController {
         }
     }
 
-       static async listar(req, res) {
+    static async listar(req, res) {
         try {
-         
+
             const funcGetAll = await funcionarioService.listar()
-            if(funcGetAll!==null){
-                   res.status(200).json({
-                   funcionarios: funcGetAll
+            if (funcGetAll !== null) {
+                res.status(200).json({
+                    funcionarios: funcGetAll
                 })
             }
 
-           } catch(error){
-                res.status(404).json({
-                  message: 'Não há funcionarios'
-                })
-           }
-        } 
-
-        static async deletar(req, res){
-            const{id} = req.params
-            try {
-                const deletado = await funcionarioService.deletar(Number(id))
-
-                if(deletado){
-                    res.status(200).json({
-                        message: `funcionario ${id} deletado com sucesso`
-                    })
-                } else{
-                    res.status(404).json({
-                        message: `funcionario não encontrado`
-                    })
-                }
-            } catch (error) {
-                res.status(500).json({
-                        message: `erro do servidor`
-                    })
-            }
+        } catch (error) {
+            res.status(404).json({
+                message: 'Não há funcionarios'
+            })
         }
-
     }
+
+    static async deletar(req, res) {
+        const { id } = req.params
+        try {
+            const deletado = await funcionarioService.deletar(Number(id))
+
+            if (deletado) {
+                res.status(200).json({
+                    message: `funcionario ${id} deletado com sucesso`
+                })
+            } else {
+                res.status(404).json({
+                    message: `funcionario não encontrado`
+                })
+            }
+        } catch (error) {
+            res.status(500).json({
+                message: `erro do servidor`
+            })
+        }
+    }
+
+    static async pesquisarFuncionario(req, res) {
+        try {
+            const { nome } = req.body
+            const funcionario = await funcionarioService.pesquisarPeloNome(nome);
+
+            if (funcionario[0] !== null) {
+                res.status(200).json({
+                    message: 'funcionario encontrado',
+                    funcionario: funcionario
+                })
+            }
+        } catch (error) {
+            res.status(404).json({
+                message: 'funcionario nao encontrado.'
+            })
+        }
+    }
+
+}
 
 
 module.exports = FuncionarioController;
